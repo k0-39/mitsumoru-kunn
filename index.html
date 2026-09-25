@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ミツモルくん | 貸切バス運賃計算</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=M+PLUS+Rounded+1c:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<meta name="theme-color" content="#2E86DE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ミツモルくん">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAMAAAAKE/YAAAAAflBMVEUuht4hMEkXITQAAAD+yju93vkmRm0nXplkYEstht7ktzwthd7G6P4pjeISZ7NVqv8recgA//8KfPNVVaoAAP9uhZ9dUjCoijapjkEAAH8Af39VqqqNdTRedI6Tr8qQfUMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACG7DYsAAAAIHRSTlP+//8A//////9b/6L/HwMD/wEGAwH/////AgID/////6ZgJccAAANcSURBVHja7Z3ddqIwFEYTkSAi/1Rtx7bv/5ZDEBXQinQgyTfr2xe9yErbzfEkJIbFEd4D0qT+EYdhJKwRhWFcSyTpIz/xQLkxtih8E49bnTHpOsiVC8YX76pReiqdl14SCqcIE6/Mn0nX1+SYcqM9DLboOxeRcJCo6Ft3pKvUxTBfgp1Wj6Tzwl1nbV3k99J57kXCYSJtOJCuitRp59o6Laq+dFV6jjvrWJdVTzpx31lbJ13pxOUx2B2NyU36jxcLCOJatZXOCxDn2rqZ+ESzjopQpKNm0VdLlx5MoHWClI30B5Bzbf2hpVOMmaOzCqml36ECXYf63RNggW5CLUqcqeN6NxceWHboCUSgZYfOD4GWHTo/BFx21PmBKR3iSYciwpMGVCaEEEIIIYQQQgghxDBBEKjfEwSZceMskP+MCgxHWc6CUW21kjMRADrLVYDnbCzWwazOUpqYRTI5Mwpn4jCbILM7Gwj1/IGWElJ68fxQlMaVXhmV/t72Obbtx0H792XA+S2f9qSP6yHHp+1fuytvtqQ363s2T9o/d5dA+zsfRHr1dpP2d4rSlKY0pSlNaUqjSm9ApDsLJt+3FWm5vXPbPmtX/tV692VtPa2Gdtvzh765az//0sa/LKe/LO5c5KbPy+02t1u/2A42SCxpBza2/N5j0e8fV21izoaB9JhbWUNpSv9f0hyIP5wEaGY8lNN/zsShXO8MY/VwOTGy+FgZPUS8HiaqnsOr2sPuhh9DEIGScjigRgZcv4NUFp740GfkfYvgOcPuwgbZxElAmp4zXpv8sgmfy1j3ZQN92K63+/HYTey+1Eg8/+fzJnY/mqYTuy86DE/tfvtF6X23u4X8OKf0oWcxeo1t9zWU9MmytOp+3odp6XGwldPtyDp1Aq2mdbdxe2nnsP3hsH/ldiGndV821K/emCd2N3VLRLiNDxcfwbSLtOOsH9GbJiEdcG62MK2DyhbovuCeUT/BnS3UnRBCCCGEEEIIIYQQQqwC+dpbyBcM8/3TpqQhX0+O+SJ4xFfuQxY3gCwjAVmwA7M0CmQRGsxyP5CFlTBLWEEWC8Msy4ZZAA+z1CBCUcdiWNQRs3wmZqFSzJKwmMV3QcscYxaUdrB0tzdeuhu0SPqtHH1stxx9/HM5+r9UP0sME6ls/QAAAABJRU5ErkJggg==">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAflBMVEUwjeknZ6xgYE4Zf/IuhuD/1jvZsToXHS0RNmWki0IccaorfM8tiNpedI2Qciqsy+ISQ31nTx3gt0DV+P9EOyeqjDmHorwthd0vieQaKkYaJTgkN1MgLUQkRm4AAAAtht4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD9uDovAAAAIHRSTlPn//8GeP//////Cf8c//////////////7+//////8A0xCPhQIAAADSSURBVHjatZNXDoMwDECdQAajrA6cAdz/lg0Vaim4RKraJ+UneXIsD0jGPAXsCRDSfExgLAHJ92AglCMkE/QfgSmBFPsDMIXpWDiKv/zyOwFfUML7LRIRmFvBcCsgU2bBW+NdgVthMHzBnbj2bC/4TogsE0KezrUjBRkRTCYl57K78vpmKCGk5kOGLhxjLCEou2YnhDoYZYcZp9RQEJUsrLywMFugq0oDKVRqDoy6bTVVamT68TH2TUP2IswwPrv6p4H5XoiOfXRxoqsXX97I+t8BaSZV9s261FYAAAAASUVORK5CYII=">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIuODn+ODhOODouODq+OBj+OCkyAtIOiyuOWIh+ODkOOCuemBi+izg+ioiOeulyIsICJzaG9ydF9uYW1lIjogIuODn+ODhOODouODq+OBj+OCkyIsICJkZXNjcmlwdGlvbiI6ICLosrjliIfjg5Djgrnmlpnph5HjgpLjg5Hjg4PjgajmpoLnrpfopovnqY3jgoLjgooiLCAic3RhcnRfdXJsIjogIi4iLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgImJhY2tncm91bmRfY29sb3IiOiAiI0Y1RUVERCIsICJ0aGVtZV9jb2xvciI6ICIjMkU4NkRFIiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBTUFBQUJsQXB3MUFBQUFmbEJNVkVVWElUUXZpdVVhSzBhKzMvb25YWmhUV0ZUKzBUc3RodDBoZStza2plVEg2Zjh0aGQ0blIyNHRjN25Hb2tBcmVjZ0EvLzhBQVA5VnF2L2JzVHBpVmpHcWowR3RqalpxYXYrRW43bFZWYXFFYnpOQlBTOHRoZDBpTVVvQUFBRCt5RHdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFEMm9Hb2JBQUFBSUhSU1RsUC8rLy8vLy8vL1lRWWUvNnIvQS8vL0FRRUQvLy8vL3dML0EvLy8vdjhBLzB5RHJCVUFBQVVMU1VSQlZIamE3WjFyZDlvd0RJWnROeENIT0lNQXBlMW1uUC8vTDJmRkNlUldjSXB6MGFuMFlXZG5tYnYzUVlvc2V6Wmlac2dPbWJTL0prbWNwbHd2YWp4TjR5U3hZbVIyR0pUS0J1V0QrampsemhiVjc4eENXRW1EQ0gyQS9HaHhuWHE5RW5NTU5paU8rWE9BRE9TdlNmMmRBUkN5SndENWw1T3ZWMmdPNFN0L0JHQVIxeXEvUmloRmZnZVFtQ1JkcjN5SGtFcVRmQWRnOWE5YnZrTklXZ1NzR1QveCt2VURRZHlNSXRaSVB5ajBPNEtzRDRCR2Y0ZUE0WXFmZmhSVkFFZE0raDNCc1FrZ01lU2ZiaTZTZDRCRGhrdy9FRlRsS1hNQmxDTFREM1cyQ3lJQStMQXZnRVpuTm9nK0hFQXVKY2NJd0tYTVM0QWpTZ2RZZ2pJVE1YUElFNDBUUUNmNXdRSmtTQjFRdWlBejdHQ2t4Z3FnWlg1Z0VxMERTaGRJOW9Gd0Rtak1CUi9NSkJ3dmdKMExHT0lJS21PSUlZNmdNb1lZMmh4VVRRVXNRYXdmQ2lJVzR3YUlXWW9iSU1VUHdIRURjS1p4QTJpbWtSc0JFQUFCRUFBQkVBQUJFQUFCRUFBQkVBQUJFQUFCRUFBQnpBYkFYN05sQVVJSUNBckJSdjdUKzBpcDYydW1WTFFQaDhCR3lZL1VWVmg3U1gvNUExUVVDbUVFQU4rckY3VTNLVlNnWFdWL0FCNWRROGt2RWE0Um54VWdzUDVnQk13N2ZnTHJCNEk5bjlFREtyUitTNkRtOHdDUDJEVzhzUUJCeEh3RGFCcDdQWWc4QVNJeGlYNFJ6UVdnSmdKUTh3Qk1Ga0VCWW9ndEdVRWhZdWkzQUxCdU9kWTBqeWNEZnpkUUloMFBJTVNtWS9VY0xhN2RKNVZnVzdwVmY5QXRCeGNBRU5mM290ZzJyVGh0U2xWaWMrbzhLTjVMTm5IOWZOczVlL3RzVnlSTEFMeGJZVzNiRmtBZ05rWC95WHNKOExsN3EyMzN1VENBbGRtM1V1Y0FtVFdMSnRSYjAxcFR5aElBQXpLM2Z3RGd6OUFUQU5qc0d2cDNHd0lnQUFJZ0FBSWdBQUlnQUFLZ2F2UzNyZ2Z3cjhqUXI0bng3MHFzYkgvNnR3RGczNWtUMDloOElUU1ZFUUFCRUFBQmVLZlI0T0xuUzZQT1d0T3hHSDNzcGxzTHNVaUhNTi8vcVFlN0gvZTRlY09ib1RzQ2pub0VPWDgyNnNBVEhCZ1NEVEZnbmpWUGE0VDlLV28vLzRHbjhzaFcxTkZ2OVhqRWVtZEV3QU5iWXcvOVFTRDFFc2xUNjQ0SWVHUnUvS25GL1VBbWZHSzkvQ1cwWGc1QTlVUGtjVGdQVFNMUlloNjRPZUI4T1ozTzFlOGZuOWk0T2NDT3VOUXVXQTZnK2pqUHhiYlliaThlRVhGRFBtMkxZbnZ5Y3RxVUFGVUVuZHkyejkvbmNtcmtTN2xwVkROSGl3RzRlRGk3TGF6NkE0MDhBT3E5cmxVQkZHZ0IvbFU3aHhkL2dKTTM4aXd2c1l2bzR1ei9EamluYmM4ckFXQVhtNFRxUFBvd0tkNnkwRjg3b3FqZStvQmZ4ekg2QWtTZDFmK2R6MzdUMG4zcXU0OVFDNVlTL1hsVmpDNCtBazRENHozUXJ5V2V4Zk5BK2JmWURRNlFvOFZZTlYxbUZmSWF6ZmhMUUZ5cnNaOW0yd2RSMEd0QVA3akZaSmNFTnlkNExxd2FJMFJZL1QrN1I4WjFGTUd5MFA4eUQ2emxGSXlJbHI2RzFWemtqMXFUODRuYU1kQlZSQUlnQUFJZ0FBSWdBQUlnQUFJZ0FBSWdBQUlnQUFJZ0FBSWdBQUw0RVFEMkw0OUgvL1g5MUFGaWFRRDBUVVRRdDNGQjMwZ0hmU3NqL00ya3NMZnpRdDlRRFgxTE8vUk5CZEczZGNUZldCTjlhMVA4eldYUnQvZkYzMkFaZjR0cjlFM0c4YmQ1Qng4Z0lnRDkwclFCeWdtWjQ5R2ZtUzRBSG9LVy9nWUFsaWhxeGs4YndDUVljaEhrbjhRTUE5Z0hNbDAzQXVlcGJPbHZBNEJyWXI1ZUJBN2gwNHlmSG9ESnY0eGNLd0xJbCtZck40OEFJQms1Qkw0NjlTQy9rWDYrQXpENUVSRFNOVEdBbGpTMm9YL016WE1BcU8zZ2hZNVRQYzFwNTdIU3JZSlN2WEhWbXdjQUlNQ2JrbGlJcGV0c25scnhvRjRPeWpmbVAvYWJsM2YzeWxlMkFBQUFBRWxGVGtTdVFtQ0MiLCAic2l6ZXMiOiAiMTkyeDE5MiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSJ9LCB7InNyYyI6ICJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQWdBQUFBSUFDQU1BQUFERHBpVElBQUFBZmxCTVZFVXVpTjRiTWs4a1dJL2RzRHNsZitJdGhkNGlSR3dzZTh3cUxDMXJZMFdualVHdXpPZ0EvLzl1WGpKV2E0VlZxditGYnpTMmxEZDVrcXlJbzcwdGhkMGlNVW9BQUFEK3lEc1pKVG9VSEN5LzRQc3VoZDB0aGQ0dGhkNHVodDBvYUtzQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBRDFGK3RXQUFBQUlIUlNUbE1kLy8vL0NXai8vLy8vLy84Qi8vOEQvLy8vLy83L0FQLy8vLytMMExaTi83Qi94ZDBBQUF1aFNVUkJWSGphN2QxdFc5cElGQWJnSVFabzFXcTd4WWpsN2YvL3kxWGI3cXFBSkpCQU11ZCtQdTFMeXpYWHpKMHpad2JFVkxXZU1xM0hpOFZxdVp4SlMxa3VWNHZGZUozSzlsY3J0ZnBpYWJ4WVdhNHVzMXFNVStvbGdMUmVlT1RQVlJBVzY5UXJBS1hGdndTQ3NoOEEwbHJWdjlSKzBFSWhTS2MyZkF2cmNNa3NUbTBNVHdLUVZQNCs3QVhwTWdEUzJPcjN4Y0E0blIxQU9UYnZmY3E0UENzQXk1OE5nV01BbEJxL2ZqYUU1VmtBNlB2N2ZDYm9ITUR0MmpUM09ldmJiZ0VrblgvZkw0ZFNod0JzL3ZtMUFrbjFqNzBQMUFlUVhQbm51QS9VL3BNZS8ySGRDclFNNE43Tno5QUUzTGNKUVBuUGRodEl5bisrdldCTEFPNGQvb1o2SUx4dkEwQ3AvQTkzR3loUEIyRDd6MXRBY3ZlYmRaYnBOQURXUDNjQm4vL3ZaQUtIbjNROEFNZS8vSStEeWZySEZwRFUvOWk3UUxMK3NRVWsvWC9zczBDeS9qRUVsTTBBdVAvTkxmdnVCSGNEdUxmKytRbTRid0RBKzM4Wlpsd2ZnQXVBT05jQnlRRXc5bUV3YVFCaXR3RTdBUGo4WjZRMklHa0FZZ3RJR29EWWJjREgvM0NyQWNpN0RiZzlBTUFHRU93cytBRkFhWWFDYlFMSkZXQ3dMRDREb0FNTVZ3TGUvZHV0OTRERDlZRkpCeGk3RDB3NndOaWJRTklCeHU0RGt3NHdZTXFkQUJTQWlDVWc2UUJpZHdISnU4QVJNOTRHb0FERUxBRkpBWWhkQXBJalFPeURRRklBWXBlQXZ3QzhDeEFzeS9jQTdBQlIyOERrRWlob0ZtOEJsSGFBZUh0QStRYUFIU0RzSHBEc0FMSDNnS1FBeEM0QnlTZUJ3bWI5SHdBL0RCSXlxNzhBU25NUk0rVWZBSGFBd0h0QWNnYUlmUTVJM2dlSW0rVnZBQTZCa1ErQ1NRc1F1d2xJV29EWVRVRFNBc1J1QXBJV0lQWk5BQURCdThEazA0Q1JNMzRHb0FjTTNRVW03d1JGenVvWmdGbUluQ3FWSmlGMEY1Z2NBb0lEY0JFYyt4aVFuQUtEQTNBS2pIME9CQ0E2QU5jQXNTOEMvSUxJMkZrQ0VCMkFPUWgrRVdBS0FCQUFCQUFCUUFBUUFBUUFBVUFBRUFBRUFBRkFBQkFBQkFBQlFBQVFBQVFBQVVBQUVBQUVBQUZBQUJBQUJBQUJRQUFRQUFRQUFVQUFFQUFFQUFGQUFCQUFCQUFCUUFBUUFBUUFBVUFBRUFBRUFBRkFBQkFBQkFBQlFBQVFBQVFBQVVBQUVBQUVBQUZBQUJBQUJBQUJRQUFRQUFRQUdTeUE2YVlvSnBPSFFXUXlLWXJORklEMnNpa0dzdlR2R0JRYkFOcElVVHdNTmtVQndLa1AvOFBBc3dIZ2xLZi9JWU1VQUVSOStuT3BBcGNCTUowOFpKUEpGSUN3ajM4R1JlQVNBSXFIekZJQTBDU1RoK3d5QWFEKzlqOTZ5RENqS1FBMTEvOGgwMHdCQ0wzK2d4VndaZ0NqZkFHTUFBalovdzI5RXp3cmdPSWg2eFFBaExyL3llTkc2SXdBcGcvWlp3cEExQVpnc0cxQXNnSEUzZ1RPQitBaFJBQUllZ0lZN0VrZ0tRQ3hTOEM1QUd5aUFOZ0FFTG9BREs0RW5BbEFFUWRBQVFBQUFNVGRBWWEyQjV3SHdDWVNnQTBBa1hlQW9lMEI1d0V3aVFSZ0FrREE5d0VIKzU3Z1dRQnNZZ0hZQUJDNUJSaFlFd0FBQUhyQXlGMGdBQUM0QjR4OEZ3Z0FBQUFBQUFBQUFBQndVUUJmcjY4ZWErWHErbXVYcjNIMzgrYm0xNGZjM1B5OEE2QlRBRjlycnR5ZjlmdmExV3ZjYlMzK2Z3anVBT2dPd1BWancxeDM4eHIvL1Bvay93RFFGWURHYTdkajlkcDRqVS9YdjRFQUFKb0IrUHA0Ukw2Mi94cDN2dzdrRG9CT0FGd2RzM2hYN2IvR3pTRUFOd0IwQWVDb2gvZkQ0OXZHYXh3c0FMVkxBQUNOQUZ3ZnQzalhiYi9HejhNQWZnTFFBWUNyNHhidnF1M1h1RGtNNEFhQURnQThIcG0yWHdPQTRBQisxUWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBRGdDeUpDQXZBVk1jRUIrSktvNEFCOFRWeHdBTDRvTWpvQVh4VWJISUF2aTQ0T3dOZkZSd2ZnRjBaRUIrQlh4b1FIa0ZNQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFNSUNtTVJhL3drQUFBRHdOa1VzQUFVQUFBRHdOcHRZQURZQWZNZzhXQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBSUZjQWJ6TE45Wk9nMDlrd2MyNEFzK2tveTU4RkdlcjZueDlBalo4VEdqMVgwYWZYUFAvRHhidzBHY1ZrTmdPZ2ZvclA1LzNwUXk1aG9Oa29paGtBamJLcFArK1hNTkIwRkpzWkFFMGJnZDNid0o2SmY1Mzg4NjEvdzFFTWQvdS9JSUNkUldEMDlHbk9WQVNham1MUWovOEZBV3gzQXZPbkE1bGYrUEhmTllwaU5nT2duU3B3Y09iUElxRFpLRGF6R1FDblZZR2lYdUU5MHpiUWFCUkZNWnNCMEVJWktDYTFaNzVqQWZWSE1TazJzMHlTZWpDRzZXWmVkK283M1FXZWFnT1k1Wk0rQUpqVmZ2UTZuZnQrakNJaWdPS3BRWXE4UnhFUndPYXBVVFk1anlJa2dGR3pxUi9sUElxSUFJcW5oaW55SFVWRUFOTjUwNm1mVDNNZFJVZ0FqUis5VGg2K2Zvd2lKSUNkajk2WGJ6K3VIaCt2Zm56N3N2UGh5M1VVRVFIc2FyN24zLy8vQlcvZjUrZG93ZnN4aXBBQWRqVGZYOTc5OHIrckwyZG93ZnN4aXBBQTVnZG1mdWZjei9NY1JVUUEyN1YzdnZYTFA2L21YVGRnL1JoRlNBRGIzZmYzN1YvMCtyM3JxZS9IS0VJQ21HeVYzbDIvNm5lci9FNXlIRVZJQUZ2ZDE3ZGRVLyt0NC82ckg2TUE0Q1UvZGszOWozTUR1TWdvUWdMWTZxeDIvdjczcTQ0YjhINk1JaVNBcmNicWNXZTIvbGlPb3dBQUFGdUFMVUFUcUFsMERIUU1kQkhrSWlnR0FGZkJ3UUY0TXlnNEFHOEhSd2ZnQXlIQkFmaElXSEFBUGhRYUhZQ1BoUWNINEFkRGdnUHdvMkhSQWZqaDBPZ0EvSGg0Y0FDK0lDSTZBRjhSRXgxQS9ia2Y1VCtLa0FEcW5zSzZQWHYxWXhRaEFjeW10WjYrMFRUQ0tFSUNxRlYvUjFGR0VSTEE0UzY4aURPS2tBQm1tMDhmdjlFbTBpaENBbmgrL1BaMllmTWkyaWhDQXBoTmQwLyt2SmpHRzBWSUFLOGxlUDd4Ti9Wc29vNGlKSUNYR2x4TVJpOExNQitOSnBmN1Z2NStqQ0lrQUFGQUFCQUFCQUFCUUFBUUFBUUFBVUFBRUFBRUFBRkFBQkFBQkFBQlFBQVFBQVFBQVVBQUVBQUVBQUZBQUJBQUJBQUJRQUFRQUFRQUFVQUFFQUFFQUFCTUFRQUNnQUFnQUFnQUFvQUFJQUFJQUFLQUFDQUFDQUFDZ0FBZ0FBZ0FBb0FBSUFBSUFBS0FBQ0FBQ0FBQ2dBQWdBQWdBQW9BQUlBQUlBQUtBQUNBQUNBRFNOd0JMY3hBNVN3Q2lBMWlaaE1oWnBZVkppSndGQU5FQmpFMUM1SXpUMmlURUJ1QWlJUFkxUUNwTlFtd0FsVW1JbkNwVkxnSWlYd004QTNBT2pId0tmQWJnSEJqNUVQQU13REVnY2c4SVFPeVV6d0FxN3dlR3piSjZBYUFMRE53RHZnQndHUncyNjFjQW1vREFQZUFMQUUxQTRCYmdGWUFtSUc0TDhBcEFFeEMzQlhnRlVKcUtzQzNBS3dEdkI4WE1xdm9Md0I0UWRnZjREY0JCTU93TzhCdUFjMERVTThCZkFFcEExQUx3QjBEcExpaGNsdVViQVBhQXFEdkFYd0QyZ0tBN3dGOEEzZzhJdHdOVTd3SDRaR0N3akQ4QXNBY0VTL2tCZ0JJUXN3RDhENkEwS1FGYndEY0FsSUNRQmVBTkFDVWdZZ0Y0QThCbFVKd3NxbDBBSEFUQ0hRSGVBMUFDQWhhQWR3Q1VnSEFkd0hzQVBoa1VJK3RxSDRCYkh3NE1rTlh0WGdBMmdXZ2J3RWNBK3NCWUhlQTJnTklFeFNvQUh3SG9BME4xZ0RzQTZBTWpkWUE3QU9nRFEyMEFPd0I0VnpEbmpLdkRBQWlJdFA2N0FOeHJBM0p0QU81ckFkQUdoR2tBOWdCd0ZveHhBdHdQd0lWZ2tBWmdMd0J0UUl3R1lDK0FxaVFndC9YZnM5Sjcvck9mRjg0c3k3SnFCcUR5SzBXeld2Lzk2MXp0L1QrbUxlOEQ0Q0VBQkVSWS84OEF1QTRJc1A2ZkFpQWcvL1gvSElCZElQdjFQd0RBV1NEai9yOFdBQUl5WC8rREFLcmtUbkRBV1pYVnFRRGNDbWU5L2pVQVZQYytJalRRak8rck5nQTREZzQwNnpwcld3dUFSbUNJNWIvbTB0YjZVN2FCTE10L0F3QStLenkwOWErN3JyVUIyQWJ5Sy8vTkFGUzNlc0doZEgrM1ZSY0FxcXIwWWRFQlpORm9UUnY5WVRmRFdWWC9Zd0RZQnpLcS9rY0JlUDRiOW9GTXF2K1JBTFFDdlQzNmxVY3M1akVBbmdtNEZlamY4aCszbE1mOUxRU3llUHBQQWZEOE44ZE9CRDNKOHVqbFB3WEFhei9Jd09WWGYzSGFHbFlucFhRbXVIVGZYNTYyZ2ljQ2VIbUZ0VGNKTG5YcHMyNWgrYW9XVXE3dEJlZXYvT3V5amJWckJjRHZRZ0RCR1JlL3ZYV3JXa3laeGd2N1FiZFZmekZPWlp0cjFpcUEveGlNRjR2VlVrRm83NUZmcmhhTGNjdEwvenYvQWplZ2NvWWUwRkQ3QUFBQUFFbEZUa1N1UW1DQyIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIn1dfQ==">
+<style>
+  :root {
+    --bg: #F5EEDD;
+    --card-bg: #ffffff;
+    --text: #223046;
+    --text-muted: #75705F;
+    --border: #E6DAC0;
+    --navy: #2E86DE;
+    --navy-soft: #E3F3FF;
+    --accent: #2E86DE;
+    --accent-soft: #E3F3FF;
+    --accent-text: #1D6FBF;
+    --amber: #FFC93C;
+    --amber-deep: #FFA000;
+    --danger: #FF6B6B;
+    --danger-soft: #FFECEC;
+    --input-bg: #ffffff;
+    --shadow: 0 2px 8px rgba(120,95,40,0.10), 0 1px 2px rgba(120,95,40,0.06);
+    --total-bg: linear-gradient(135deg, #FFD966 0%, #FF9F43 100%);
+    --total-text: #22314A;
+    --divider: #EFE7D4;
+    --map-bg: #F0E8D6;
+    --map-line: #2E86DE;
+    --map-dot: #22314A;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161a; --card-bg: #1d2025; --text: #eceef1; --text-muted: #9aa1ac;
+      --border: #2c3036; --navy: #4c78c9; --accent: #4c78c9; --accent-soft: #1e2940; --accent-text: #a9c2f2;
+      --amber: #FFC44D; --amber-deep: #FFAF1D;
+      --danger: #ff8a80; --danger-soft: #3a2323; --input-bg: #23262c;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4); --total-bg: #0c1a2e; --total-text: #ffffff;
+      --divider: #2c3036; --map-bg: #21262d; --map-line: #4c78c9; --map-dot: #eceef1;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14161a; --card-bg: #1d2025; --text: #eceef1; --text-muted: #9aa1ac;
+    --border: #2c3036; --navy: #4c78c9; --accent: #4c78c9; --accent-soft: #1e2940; --accent-text: #a9c2f2;
+    --amber: #FFC44D; --amber-deep: #FFAF1D;
+    --danger: #ff8a80; --danger-soft: #3a2323; --input-bg: #23262c;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4); --total-bg: #0c1a2e; --total-text: #ffffff;
+    --divider: #2c3036; --map-bg: #21262d; --map-line: #4c78c9; --map-dot: #eceef1;
+  }
+
+  html { font-size: 18px; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", Meiryo, system-ui, sans-serif;
+    line-height: 1.65; padding: 22px 14px 60px;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+
+  .brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .brand-mark { flex-shrink: 0; width: 58px; height: 58px; }
+  h1 {
+    font-family: "M PLUS Rounded 1c", "Zen Kaku Gothic New", sans-serif;
+    font-weight: 800; font-size: 1.55rem; margin: 0; color: var(--navy); letter-spacing: 0.01em;
+  }
+  .subtitle { color: var(--text-muted); font-size: 0.83rem; margin: 2px 0 0; }
+  .road-divider {
+    height: 4px; border-radius: 2px; margin: 14px 0 18px;
+    background: repeating-linear-gradient(90deg, var(--amber) 0 18px, transparent 18px 28px);
+  }
+
+  .install-banner {
+    display: none; align-items: center; gap: 10px;
+    background: var(--accent-soft); color: var(--accent-text);
+    border-radius: 12px; padding: 10px 12px; margin-bottom: 16px;
+    font-size: 0.78rem; line-height: 1.5;
+  }
+  .install-banner.show { display: flex; }
+  .install-banner button {
+    flex-shrink: 0; background: none; border: none; color: var(--accent-text);
+    font-size: 0.9rem; font-weight: 700; cursor: pointer; padding: 2px 4px;
+  }
+
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+    padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow);
+  }
+  .card h2 {
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-weight: 700; font-size: 0.98rem; margin: 0 0 14px; color: var(--navy);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h2 .clear-history { margin-left: auto; }
+  .step-badge {
+    flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--navy); color: #ffffff;
+    font-family: "M PLUS Rounded 1c", sans-serif; font-weight: 800; font-size: 0.92rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .tab-bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: var(--bg); display: flex; gap: 8px; overflow-x: auto;
+    padding: 10px 2px 12px; margin: 0 0 16px; border-bottom: 1px solid var(--border);
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-btn {
+    flex-shrink: 0; display: flex; align-items: center; gap: 7px;
+    padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--border);
+    background: var(--card-bg); color: var(--text-muted);
+    font-family: "M PLUS Rounded 1c", sans-serif; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; white-space: nowrap;
+  }
+  .tab-btn.active { background: var(--navy); border-color: var(--navy); color: #ffffff; }
+  .step-badge-mini {
+    flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--divider); color: var(--text-muted);
+    font-family: "M PLUS Rounded 1c", sans-serif; font-weight: 800; font-size: 0.68rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tab-btn.active .step-badge-mini { background: rgba(255,255,255,0.28); color: #ffffff; }
+  .tab-panel { display: none; }
+  .tab-panel.active-panel { display: block; }
+
+  label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px; }
+  .row .field label { min-height: 2.5em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .field { margin-bottom: 14px; }
+  .row { display: flex; gap: 10px; }
+  .row .field { flex: 1; min-width: 0; }
+
+  select, input[type="number"], input[type="text"] {
+    width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--input-bg); color: var(--text); font-size: 1.02rem;
+    appearance: none; -webkit-appearance: none;
+  }
+  select:focus, input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+  .vehicle-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+  .vehicle-btn {
+    padding: 11px 8px; border-radius: 999px; border: 1.5px solid var(--border);
+    background: var(--input-bg); color: var(--text); font-size: 0.85rem; font-weight: 600; cursor: pointer; text-align: center;
+  }
+  .vehicle-btn.active { border-color: var(--navy); background: var(--navy); color: #ffffff; }
+  .rate-note { font-size: 0.75rem; color: var(--text-muted); margin-top: -6px; margin-bottom: 14px; }
+
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 10px 0;
+    border-top: 1px solid var(--divider);
+  }
+  .toggle-row:first-of-type { border-top: none; }
+  .toggle-row span.label-main { font-size: 0.9rem; }
+  .toggle-row span.label-sub { display:block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+  .switch { position: relative; width: 52px; height: 30px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; inset: 0; background: var(--border); border-radius: 999px; transition: 0.15s; }
+  .slider::before { content: ""; position: absolute; height: 24px; width: 24px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.15s; }
+  input:checked + .slider { background: var(--navy); }
+  input:checked + .slider::before { transform: translateX(22px); }
+
+  .sub-fields { display: none; padding-top: 10px; }
+  .sub-fields.open { display: block; }
+
+  button.calc-btn {
+    width: 100%; padding: 14px; font-size: 1rem; font-weight: 700; border: none;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    border-radius: 999px; background: var(--navy); color: #ffffff; cursor: pointer; margin-top: 4px;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+  }
+  button.calc-btn:active { opacity: 0.9; transform: translateY(1px); box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
+  button.secondary-btn {
+    width: 100%; padding: 11px; font-size: 0.88rem; font-weight: 600; border: 1.5px dashed var(--amber-deep);
+    border-radius: 10px; background: var(--accent-soft); color: var(--accent-text); cursor: pointer;
+  }
+  button.secondary-btn:active { opacity: 0.85; }
+
+  .result-body { display: none; }
+  .result-body.open { display: block; }
+  .result-empty { display: block; font-size: 0.85rem; color: var(--text-muted); padding: 8px 0 4px; }
+  .result-empty.hidden { display: none; }
+
+  .breakdown-row {
+    display: flex; justify-content: space-between; font-size: 0.85rem; padding: 7px 0;
+    border-bottom: 1px dashed var(--divider);
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-row .desc { color: var(--text-muted); }
+  .breakdown-row .desc small { display:block; font-size: 0.72rem; margin-top: 1px; }
+  .breakdown-row .val { font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 10px; }
+
+  .subtotal-line {
+    display: flex; justify-content: space-between; font-size: 0.92rem; font-weight: 600;
+    padding: 10px 0 4px; margin-top: 4px; border-top: 1px solid var(--border);
+  }
+
+  .total-box {
+    margin-top: 14px; position: relative;
+    background: var(--total-bg); color: var(--total-text);
+    border-radius: 16px; padding: 18px 18px 16px; text-align: center; overflow: hidden;
+  }
+  .total-box .label {
+    font-size: 0.74rem; letter-spacing: 0.04em; opacity: 0.75; margin-bottom: 6px;
+  }
+  .total-box .amount {
+    font-family: "M PLUS Rounded 1c", sans-serif; font-size: 2.15rem; font-weight: 800;
+    color: var(--total-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .total-box .tax-note { font-size: 0.72rem; opacity: 0.7; margin-top: 6px; }
+
+  .disclaimer {
+    font-size: 0.74rem; color: var(--text-muted); background: var(--accent-soft);
+    border-radius: 10px; padding: 12px 14px; margin-top: 4px;
+  }
+  .disclaimer.warn { background: var(--danger-soft); color: var(--danger); }
+
+
+  .history-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; padding: 8px 0; border-bottom: 1px solid var(--divider); }
+  .history-item:last-child { border-bottom: none; }
+  .history-item .meta { color: var(--text-muted); font-size: 0.72rem; }
+  .history-empty { color: var(--text-muted); font-size: 0.82rem; text-align: center; padding: 6px 0; }
+  .clear-history { background: none; border: none; color: var(--danger); font-size: 0.75rem; cursor: pointer; padding: 4px; }
+
+  /* 経路(waypoints) */
+  .waypoint {
+    border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 10px;
+    background: var(--input-bg); position: relative;
+  }
+  .waypoint-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .waypoint-tag {
+    font-size: 0.72rem; font-weight: 700; color: #fff; background: var(--accent);
+    padding: 2px 8px; border-radius: 999px;
+  }
+  .waypoint-tag.start { background: #2FB380; }
+  .waypoint-tag.end { background: var(--danger); }
+  .waypoint-remove {
+    background: none; border: none; color: var(--danger); font-size: 0.78rem; cursor: pointer; padding: 2px 4px;
+  }
+  .waypoint-remove:disabled { opacity: 0.3; cursor: not-allowed; }
+  .waypoint-move {
+    background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted);
+    font-size: 0.75rem; cursor: pointer; padding: 2px 7px; line-height: 1.4;
+  }
+  .waypoint-move:disabled { opacity: 0.25; cursor: not-allowed; }
+  .waypoint-move:not(:disabled):active { background: var(--accent-soft); color: var(--accent-text); }
+  .waypoint-coords { display: flex; gap: 8px; }
+  .waypoint-coords .field { margin-bottom: 0; }
+  .waypoint-coords label { font-size: 0.82rem; min-height: 2.5em; }
+  .coord-hint { font-size: 0.68rem; color: var(--text-muted); font-weight: 400; }
+  .wp-coord-actions {
+    display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap;
+    margin-top: 8px; gap: 6px 14px;
+  }
+  .wp-clear-coords-btn {
+    background: none; border: none; color: var(--danger); font-size: 0.78rem;
+    font-weight: 600; cursor: pointer; padding: 2px 4px; white-space: nowrap;
+  }
+  .wp-clear-coords-btn:active { opacity: 0.6; }
+  .map-search-link {
+    display: inline-block; font-size: 0.8rem; font-weight: 600;
+    color: var(--accent-text); text-decoration: none;
+  }
+  .map-search-link:active { opacity: 0.7; }
+  .wp-actions {
+    display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 10px;
+  }
+  .wp-copy-btn, .wp-paste-btn {
+    width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text-muted);
+    font-size: 0.78rem; font-weight: 800; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .wp-copy-btn:active, .wp-paste-btn:active { background: var(--accent-soft); color: var(--accent-text); }
+  .wp-paste-btn.disabled { opacity: 0.35; pointer-events: none; }
+  .leg-info {
+    text-align: center; font-size: 0.75rem; color: var(--text-muted); padding: 6px 0 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+  }
+  .leg-type-toggle {
+    display: inline-flex; border-radius: 999px; background: var(--divider); padding: 2px;
+  }
+  .leg-type-btn {
+    border: none; background: none; padding: 4px 12px; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer;
+  }
+  .leg-type-btn.active[data-type="k"] { background: #B9BFC7; color: #fff; }
+  .leg-type-btn.active[data-type="j"] { background: var(--navy); color: #fff; }
+  .leg-dist { font-size: 0.7rem; color: var(--text-muted); }
+  .leg-row { display: flex; align-items: center; gap: 10px; }
+  .leg-add-btn {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    border: 1.5px dashed var(--amber-deep); background: var(--card-bg);
+    color: var(--amber-deep); font-size: 1rem; font-weight: 800; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .leg-add-btn:active { background: var(--accent-soft); }
+
+  .coord-help {
+    font-size: 0.74rem; color: var(--text-muted); background: var(--divider);
+    border-radius: 9px; padding: 10px 12px; margin-bottom: 14px;
+  }
+
+  .itinerary-summary {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 2px;
+    padding: 4px 2px 12px; margin-bottom: 4px;
+  }
+  .itin-chip {
+    flex-shrink: 0; padding: 7px 13px; border-radius: 999px; background: var(--card-bg);
+    border: 1.5px solid var(--border); font-size: 0.85rem; font-weight: 700; white-space: nowrap;
+    color: var(--text);
+  }
+  .itin-chip.empty { color: var(--text-muted); font-weight: 500; font-style: italic; border-style: dashed; }
+  .itin-chip.start { border-color: #2FB380; color: #2FB380; }
+  .itin-chip.end { border-color: var(--danger); color: var(--danger); }
+  .itin-leg {
+    flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
+    font-size: 0.62rem; font-weight: 600; color: var(--text-muted); padding: 0 4px; line-height: 1.2;
+  }
+  .itin-leg .arrow { font-size: 1rem; line-height: 1; }
+  .itin-leg.jissha { color: var(--navy); }
+
+  .leg-split-summary { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .split-row {
+    display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text);
+    background: var(--divider); border-radius: 9px; padding: 8px 12px;
+  }
+  .split-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .split-val { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--text-muted); font-size: 0.8rem; }
+
+  .route-summary { display:flex; gap:10px; margin: 12px 0; }
+  .route-summary .box {
+    flex:1; background: var(--accent-soft); border-radius: 10px; padding: 10px; text-align: center;
+  }
+  .route-summary .box .num { font-size: 1.05rem; font-weight: 700; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+  .route-summary .box .lbl { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+
+  #mapWrap { background: var(--map-bg); border-radius: 12px; padding: 10px; margin-top: 6px; display:none; }
+  #mapWrap.open { display:block; }
+  #leafletMap { width: 100%; height: 300px; border-radius: 10px; z-index: 0; }
+  .map-caption { font-size: 0.7rem; color: var(--text-muted); text-align:center; margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand-row">
+      <svg class="brand-mark" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="10" width="40" height="24" rx="8" fill="#2E86DE"/>
+        <rect x="8" y="15" width="10" height="9" rx="2" fill="#FFC93C"/>
+        <rect x="21" y="15" width="10" height="9" rx="2" fill="#FFC93C"/>
+        <rect x="34" y="15" width="6" height="9" rx="2" fill="#BFE0FB"/>
+        <rect x="4" y="28" width="40" height="4" fill="#1D6FBF"/>
+        <circle cx="14" cy="37" r="5" fill="#22314A"/>
+        <circle cx="14" cy="37" r="2" fill="#FFC93C"/>
+        <circle cx="34" cy="37" r="5" fill="#22314A"/>
+        <circle cx="34" cy="37" r="2" fill="#FFC93C"/>
+      </svg>
+      <div>
+        <h1>ミツモルくん</h1>
+        <div class="subtitle">貸切バス料金をパッと概算見積もり!</div>
+      </div>
+    </div>
+    <div class="road-divider"></div>
+  </header>
+
+  <div class="install-banner" id="installBanner">
+    <span>📲 このページはホーム画面に追加できます。iPhoneは共有ボタン→「ホーム画面に追加」、Androidはメニュー(⋮)→「ホーム画面に追加」/「アプリをインストール」から。</span>
+    <button type="button" id="installBannerClose" aria-label="閉じる">✕</button>
+  </div>
+
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="1" type="button"><span class="step-badge-mini">1</span>車種</button>
+    <button class="tab-btn" data-tab="2" type="button"><span class="step-badge-mini">2</span>経路</button>
+    <button class="tab-btn" data-tab="3" type="button"><span class="step-badge-mini">3</span>運行時間</button>
+    <button class="tab-btn" data-tab="4" type="button"><span class="step-badge-mini">4</span>料金</button>
+  </div>
+
+  <div class="card tab-panel active-panel" data-tab-panel="1">
+    <h2><span class="step-badge">1</span>車種と単価</h2>
+    <div class="vehicle-grid" id="vehicleGrid"></div>
+    <div class="rate-note" id="rateNote"></div>
+    <div class="row">
+      <div class="field">
+        <label for="kmRate">距離単価(円/km)</label>
+        <input type="number" id="kmRate" min="0" step="1">
+      </div>
+      <div class="field">
+        <label for="hourRate">時間単価(円/h)</label>
+        <input type="number" id="hourRate" min="0" step="1">
+      </div>
+    </div>
+  </div>
+
+  <div class="card tab-panel" data-tab-panel="2">
+    <h2><span class="step-badge">2</span>経路(出発地〜目的地)</h2>
+    <div id="waypointList"></div>
+    <div class="itinerary-summary" id="itinerarySummary"></div>
+
+    <button class="secondary-btn" id="geocodeBtn" type="button" style="margin-top:8px;">📍 座標を検索</button>
+    <div id="geocodeStatus" class="map-caption" style="text-align:left; margin-top:6px;"></div>
+
+    <div class="row" style="margin-top:16px;">
+      <div class="field">
+        <label for="roadFactor">道路係数(予備)</label>
+        <input type="number" id="roadFactor" min="1" step="0.05" value="1.5">
+      </div>
+      <div class="field">
+        <label for="avgSpeed">平均速度(予備・km/h)</label>
+        <input type="number" id="avgSpeed" min="1" step="1" value="40">
+      </div>
+    </div>
+
+    <button class="calc-btn" id="routeCalcBtn" type="button" style="margin-bottom: 4px; line-height: 1.4;">距離・時間を自動計算して<br>マップ表示</button>
+
+    <div id="mapWrap">
+      <div id="leafletMap"></div>
+      <div class="map-caption">地図データ: © OpenStreetMap contributors / ルート計算: OSRM</div>
+    </div>
+
+    <div class="leg-split-summary" id="legSplitSummary" style="display:none;">
+      <div class="split-row"><span class="split-dot" style="background:#B9BFC7;"></span>回送<span class="split-val" id="splitKuso"></span></div>
+      <div class="split-row"><span class="split-dot" style="background:var(--navy);"></span>実車<span class="split-val" id="splitJissha"></span></div>
+    </div>
+    <div class="map-caption" id="splitNote" style="display:none; text-align:left;">※九州運輸局方式の運賃は出庫〜帰庫の全時間・距離が対象のため、運賃計算欄には回送・実車を合算した数値を反映しています。実際の道路距離・所要時間はOSRM(無料のルート検索サービス)による概算です。込み具合により多少前後する場合があります。</div>
+
+    <div class="route-summary" id="routeSummary" style="display:none;">
+      <div class="box"><div class="num" id="routeRoadOut">-</div><div class="lbl">推定道路距離(合計)</div></div>
+      <div class="box"><div class="num" id="routeTimeOut">-</div><div class="lbl">推定走行時間(合計)</div></div>
+    </div>
+  </div>
+
+  <div class="card tab-panel" data-tab-panel="3">
+    <h2><span class="step-badge">3</span>運行時間・距離(運賃計算用)</h2>
+    <div class="field">
+      <label for="distance">走行距離(出庫〜帰庫の合計、km)</label>
+      <input type="number" id="distance" min="0" step="0.1" placeholder="自動計算するか、直接入力">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="hours">走行時間(出庫〜帰庫、時間)</label>
+        <input type="number" id="hours" min="0" step="1" placeholder="例: 8">
+      </div>
+      <div class="field">
+        <label for="minutes">(分)</label>
+        <input type="number" id="minutes" min="0" max="59" step="1" placeholder="0">
+      </div>
+    </div>
+
+    <div class="coord-help">
+      お客様のご利用時間(集合〜解散までの時間)を入力すると、実車走行時間を差し引いた待機時間を自動計算し、上の走行時間に反映します(走行時間 = 回送時間 ＋ ご利用時間)。②で経路を計算していない場合は、実車走行時間を0として計算します。
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="usageHours">ご利用時間(時間)</label>
+        <input type="number" id="usageHours" min="0" step="1" placeholder="例: 8">
+      </div>
+      <div class="field">
+        <label for="usageMinutes">(分)</label>
+        <input type="number" id="usageMinutes" min="0" max="59" step="1" placeholder="0">
+      </div>
+    </div>
+    <button class="secondary-btn" id="applyUsageBtn" type="button">ご利用時間を走行時間に反映</button>
+    <div class="map-caption" id="usageNote" style="display:none; text-align:left; margin-top:8px;"></div>
+
+    <div class="toggle-row">
+      <div>
+        <span class="label-main">深夜早朝運行(22:00〜翌5:00)</span>
+        <span class="label-sub">該当時間分の時間制運賃に2割加算</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="nightToggle"><span class="slider"></span></label>
+    </div>
+    <div class="sub-fields" id="nightFields">
+      <div class="field">
+        <label for="nightHours">22:00〜5:00にかかる時間(時間、小数可)</label>
+        <input type="number" id="nightHours" min="0" step="0.5" placeholder="例: 2">
+      </div>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <span class="label-main">交替運転者配置</span>
+        <span class="label-sub">長距離・長時間運行時の交替運転者料金</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="reliefToggle"><span class="slider"></span></label>
+    </div>
+    <div class="sub-fields" id="reliefFields">
+      <div class="row">
+        <div class="field">
+          <label for="reliefKmRate">交替距離(円/km)</label>
+          <input type="number" id="reliefKmRate" min="0" step="1" placeholder="届出額を入力">
+        </div>
+        <div class="field">
+          <label for="reliefHourRate">交替時間(円/h)</label>
+          <input type="number" id="reliefHourRate" min="0" step="1" placeholder="届出額を入力">
+        </div>
+      </div>
+    </div>
+
+    <button class="calc-btn" id="calcBtn">運賃を計算する</button>
+  </div>
+
+  <div class="card tab-panel" id="resultCard" data-tab-panel="4">
+    <h2><span class="step-badge">4</span>計算料金</h2>
+    <div class="result-empty" id="resultEmpty">③で運行時間・距離を入力し、「運賃を計算する」を押すとここに料金が表示されます。</div>
+    <div class="result-body" id="resultBody">
+    <div class="breakdown-row">
+      <span class="desc">運賃計算距離<small id="distDetail"></small></span>
+      <span class="val" id="distOut"></span>
+    </div>
+    <div class="breakdown-row">
+      <span class="desc">運賃計算時間<small id="timeDetail"></small></span>
+      <span class="val" id="timeOut"></span>
+    </div>
+    <div class="breakdown-row"><span class="desc">キロ制運賃</span><span class="val" id="kmFareOut"></span></div>
+    <div class="breakdown-row"><span class="desc">時間制運賃</span><span class="val" id="timeFareOut"></span></div>
+    <div class="breakdown-row" id="nightRow" style="display:none;"><span class="desc">深夜早朝運行料金(2割)</span><span class="val" id="nightOut"></span></div>
+    <div class="breakdown-row" id="reliefRow" style="display:none;"><span class="desc">交替運転者配置料金</span><span class="val" id="reliefOut"></span></div>
+    <div class="subtotal-line"><span>運賃・料金 小計(税抜)</span><span id="subtotalOut"></span></div>
+
+    <div class="total-box">
+      <div class="label">合計(消費税10%込み)</div>
+      <div class="amount" id="totalOut">¥0</div>
+      <div class="tax-note" id="taxNote"></div>
+    </div>
+
+    <div class="disclaimer">
+      本ツールは九州運輸局が公示する下限額(令和7年9月26日改正)をもとにした目安計算です。実際の運賃は各バス事業者の届出額により異なります。交替運転者配置料金・深夜早朝運行料金の単価は事業者ごとに届出額が異なるため、契約前に必ず事業者へご確認ください。ガイド料・有料道路利用料・航送料・駐車料・乗務員宿泊料等の実費は別途加算されます。
+    </div>
+    <div class="disclaimer warn">
+      経路の距離・時間は入力座標からの概算(直線距離×換算係数、平均速度からの推定)です。実際の道路距離・所要時間とは差が生じます。正式な見積りの前に実際の距離・時間をご確認のうえ、上の欄を修正してください。
+    </div>
+    </div>
+  </div>
+
+  <div class="card tab-panel" data-tab-panel="4">
+    <h2>計算履歴 <button class="clear-history" id="clearHistory">履歴を消去</button></h2>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function switchTab(n) {
+    n = String(n);
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === n));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active-panel", p.dataset.tabPanel === n));
+    document.getElementById("tabBar").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+  });
+
+  (function initInstallBanner(){
+    let dismissed = false;
+    try { dismissed = localStorage.getItem("mitsumoruInstallBannerDismissed") === "1"; } catch(e) {}
+    const isStandalone = window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
+    const banner = document.getElementById("installBanner");
+    if (!dismissed && !isStandalone && banner) {
+      banner.classList.add("show");
+    }
+    const closeBtn = document.getElementById("installBannerClose");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        banner.classList.remove("show");
+        try { localStorage.setItem("mitsumoruInstallBannerDismissed", "1"); } catch(e) {}
+      });
+    }
+  })();
+
+  const VEHICLES = [
+    { id: "large",     label: "大型",       km: 150, hour: 6920 },
+    { id: "medium",    label: "中型",       km: 130, hour: 5840 },
+    { id: "small",     label: "小型",       km: 120, hour: 5110 },
+    { id: "commuter",  label: "コミューター", km: 100, hour: 4560 }
+  ];
+
+  const grid = document.getElementById("vehicleGrid");
+  const kmRateEl = document.getElementById("kmRate");
+  const hourRateEl = document.getElementById("hourRate");
+  const rateNote = document.getElementById("rateNote");
+  let currentVehicle = VEHICLES[0].id;
+
+  function renderVehicleButtons() {
+    grid.innerHTML = "";
+    VEHICLES.forEach(v => {
+      const btn = document.createElement("div");
+      btn.className = "vehicle-btn" + (v.id === currentVehicle ? " active" : "");
+      btn.textContent = v.label;
+      btn.addEventListener("click", () => {
+        currentVehicle = v.id;
+        kmRateEl.value = v.km;
+        hourRateEl.value = v.hour;
+        renderVehicleButtons();
+      });
+      grid.appendChild(btn);
+    });
+  }
+  function initRates() {
+    const v = VEHICLES.find(v => v.id === currentVehicle);
+    kmRateEl.value = v.km;
+    hourRateEl.value = v.hour;
+    rateNote.textContent = "九州運輸局 公示下限額(令和7年9月26日改正)を自動入力しています。事業者の届出額が別にある場合は上の欄を書き換えてください。";
+  }
+  renderVehicleButtons();
+  initRates();
+
+  function setupToggle(toggleId, fieldsId) {
+    const toggle = document.getElementById(toggleId);
+    const fields = document.getElementById(fieldsId);
+    toggle.addEventListener("change", () => fields.classList.toggle("open", toggle.checked));
+  }
+  setupToggle("nightToggle", "nightFields");
+  setupToggle("reliefToggle", "reliefFields");
+
+  function yen(n) { return "¥" + Math.round(n).toLocaleString("ja-JP"); }
+
+  /* ---------------- 経路(waypoints) ---------------- */
+  const waypointList = document.getElementById("waypointList");
+  let waypoints = [
+    { name: "南薩観光", lat: "31.3720333", lng: "130.4454586" },
+    { name: "南薩観光", lat: "31.3720333", lng: "130.4454586" }
+  ];
+  let wpCounter = 0;
+  let copiedWaypoint = null;
+  let legTypes = defaultLegTypes(waypoints.length - 1);
+
+  function defaultLegTypes(n) {
+    if (n <= 0) return [];
+    if (n === 1) return ["j"];
+    const arr = new Array(n).fill("j");
+    arr[0] = "k";
+    arr[n - 1] = "k";
+    return arr;
+  }
+
+  function renderItinerarySummary() {
+    const el = document.getElementById("itinerarySummary");
+    if (!el) return;
+    let html = "";
+    waypoints.forEach((wp, idx) => {
+      const isFirst = idx === 0, isLast = idx === waypoints.length - 1;
+      const name = (wp.name || "").trim();
+      const cls = isFirst ? "start" : (isLast ? "end" : "");
+      if (name) {
+        html += `<span class="itin-chip ${cls}">${escapeXml(name)}</span>`;
+      } else {
+        const emptyLabel = isFirst ? "出発地未入力" : (isLast ? "到着地未入力" : "経由地未入力");
+        html += `<span class="itin-chip empty">${emptyLabel}</span>`;
+      }
+      if (idx < waypoints.length - 1) {
+        const isKuso = legTypes[idx] === "k";
+        html += `<span class="itin-leg ${isKuso ? "" : "jissha"}"><span class="arrow">→</span>${isKuso ? "回送" : "実車"}</span>`;
+      }
+    });
+    el.innerHTML = html;
+  }
+
+  function renderWaypoints() {
+    legTypes = defaultLegTypes(waypoints.length - 1);
+    waypointList.innerHTML = "";
+    waypoints.forEach((wp, idx) => {
+      const isFirst = idx === 0;
+      const isLast = idx === waypoints.length - 1;
+      const div = document.createElement("div");
+      div.className = "waypoint";
+      const tagClass = isFirst ? "start" : (isLast ? "end" : "");
+      const tagText = isFirst ? "出発" : (isLast ? "到着" : "経由" + idx);
+      const namePlaceholder = "";
+      div.innerHTML = `
+        <div class="waypoint-head">
+          <span class="waypoint-tag ${tagClass}">${tagText}</span>
+          <div style="display:flex; gap:4px; align-items:center;">
+            <button type="button" class="wp-copy-btn" id="wpCopyLink${idx}" data-idx="${idx}" title="この地点をコピー">C</button>
+            <button type="button" class="wp-paste-btn" id="wpPasteLink${idx}" data-idx="${idx}" title="コピーした内容を貼り付け">V</button>
+            <button type="button" class="waypoint-move" data-idx="${idx}" data-dir="up" ${isFirst ? "disabled" : ""} title="上へ">▲</button>
+            <button type="button" class="waypoint-move" data-idx="${idx}" data-dir="down" ${isLast ? "disabled" : ""} title="下へ">▼</button>
+            <button type="button" class="waypoint-remove" data-idx="${idx}" ${waypoints.length <= 2 ? "disabled" : ""}>削除</button>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:8px;">
+          <input type="text" class="wp-name" data-idx="${idx}" value="${wp.name.replace(/"/g,'&quot;')}" placeholder="${namePlaceholder}">
+        </div>
+        <div class="wp-actions">
+          <a href="${wp.name ? ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(wp.name)) : '#'}" class="map-search-link" id="mapSearchLink${idx}" data-idx="${idx}">🔍 マップ検索</a>
+        </div>
+        <div class="waypoint-coords">
+          <div class="field">
+            <input type="number" class="wp-lat" data-idx="${idx}" step="0.000001" value="${wp.lat}">
+          </div>
+          <div class="field">
+            <input type="number" class="wp-lng" data-idx="${idx}" step="0.000001" value="${wp.lng}">
+          </div>
+        </div>
+        <div class="wp-coord-actions">
+          <button type="button" class="wp-clear-coords-btn" data-idx="${idx}">✕ 座標を消す</button>
+        </div>
+      `;
+      waypointList.appendChild(div);
+
+      if (idx < waypoints.length - 1) {
+        const leg = document.createElement("div");
+        leg.className = "leg-info";
+        leg.id = "legInfo" + idx;
+        leg.innerHTML = `
+          <div class="leg-row">
+            <div class="leg-type-toggle">
+              <button type="button" class="leg-type-btn ${legTypes[idx] === "k" ? "active" : ""}" data-leg="${idx}" data-type="k">回送</button>
+              <button type="button" class="leg-type-btn ${legTypes[idx] === "j" ? "active" : ""}" data-leg="${idx}" data-type="j">実車</button>
+            </div>
+            <button type="button" class="leg-add-btn" data-idx="${idx}" title="ここに目的地を追加">＋</button>
+          </div>
+          <span class="leg-dist" id="legDist${idx}"></span>
+        `;
+        waypointList.appendChild(leg);
+      }
+    });
+
+    waypointList.querySelectorAll(".leg-add-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = parseInt(btn.dataset.idx, 10);
+        waypoints.splice(i + 1, 0, { name: "", lat: "", lng: "" });
+        renderWaypoints();
+      });
+    });
+
+    waypointList.querySelectorAll(".leg-type-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = parseInt(btn.dataset.leg, 10);
+        legTypes[i] = btn.dataset.type;
+        const group = btn.parentElement;
+        group.querySelectorAll(".leg-type-btn").forEach(b => b.classList.toggle("active", b.dataset.type === legTypes[i]));
+        renderItinerarySummary();
+      });
+    });
+    waypointList.querySelectorAll(".map-search-link").forEach(a => {
+      a.addEventListener("click", (e) => {
+        const i = parseInt(a.dataset.idx, 10);
+        const name = (waypoints[i].name || "").trim();
+        if (!name) {
+          e.preventDefault();
+          alert("先に地点名・住所を入力してください。");
+        }
+        // name があれば href は最新の値に更新済みなので、既定の遷移に任せる
+      });
+    });
+    waypointList.querySelectorAll(".wp-copy-btn").forEach(a => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        const i = parseInt(a.dataset.idx, 10);
+        if (!waypoints[i].name && !waypoints[i].lat && !waypoints[i].lng) {
+          alert("この地点にはまだ何も入力されていません。");
+          return;
+        }
+        copiedWaypoint = { name: waypoints[i].name, lat: waypoints[i].lat, lng: waypoints[i].lng };
+        waypointList.querySelectorAll(".wp-paste-btn").forEach(p => p.classList.remove("disabled"));
+        const original = a.textContent;
+        a.textContent = "✅";
+        setTimeout(() => { a.textContent = original; }, 1200);
+      });
+    });
+    waypointList.querySelectorAll(".wp-paste-btn").forEach(a => {
+      if (!copiedWaypoint) a.classList.add("disabled");
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!copiedWaypoint) {
+          alert("まだ何もコピーされていません。先に他の地点の「C」を押してください。");
+          return;
+        }
+        const i = parseInt(a.dataset.idx, 10);
+        waypoints[i] = { name: copiedWaypoint.name, lat: copiedWaypoint.lat, lng: copiedWaypoint.lng };
+        renderWaypoints();
+      });
+    });
+    waypointList.querySelectorAll(".wp-clear-coords-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = parseInt(btn.dataset.idx, 10);
+        waypoints[i].lat = "";
+        waypoints[i].lng = "";
+        renderWaypoints();
+      });
+    });
+    waypointList.querySelectorAll(".waypoint-move").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = parseInt(btn.dataset.idx, 10);
+        const dir = btn.dataset.dir;
+        const j = dir === "up" ? i - 1 : i + 1;
+        if (j < 0 || j >= waypoints.length) return;
+        [waypoints[i], waypoints[j]] = [waypoints[j], waypoints[i]];
+        renderWaypoints();
+      });
+    });
+    waypointList.querySelectorAll(".waypoint-remove").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = parseInt(btn.dataset.idx, 10);
+        if (waypoints.length > 2) {
+          waypoints.splice(i, 1);
+          renderWaypoints();
+        }
+      });
+    });
+    waypointList.querySelectorAll(".wp-name").forEach(inp => {
+      inp.addEventListener("input", () => {
+        const i = parseInt(inp.dataset.idx, 10);
+        waypoints[i].name = inp.value;
+        const link = document.getElementById("mapSearchLink" + i);
+        if (link) link.href = inp.value.trim() ? ("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(inp.value.trim())) : "#";
+        renderItinerarySummary();
+      });
+      inp.addEventListener("paste", (e) => {
+        const text = (e.clipboardData || window.clipboardData).getData("text");
+        const lines = text.split(/\r?\n/).map(s => s.trim()).filter(s => s.length > 0);
+        if (lines.length > 1) {
+          e.preventDefault();
+          const i = parseInt(inp.dataset.idx, 10);
+          waypoints[i].name = lines[0];
+          const newEntries = lines.slice(1).map(name => ({ name, lat: "", lng: "" }));
+          waypoints.splice(i + 1, 0, ...newEntries);
+          renderWaypoints();
+        }
+        // 1行だけの通常のペーストはブラウザの既定動作に任せる
+      });
+    });
+    function handleCoordPaste(e, i) {
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      const match = text.match(/(-?\d+\.?\d*)\s*[,\s]\s*(-?\d+\.?\d*)/);
+      if (match) {
+        e.preventDefault();
+        const lat = match[1];
+        const lng = match[2];
+        waypoints[i].lat = lat;
+        waypoints[i].lng = lng;
+        const latInp = waypointList.querySelector(`.wp-lat[data-idx="${i}"]`);
+        const lngInp = waypointList.querySelector(`.wp-lng[data-idx="${i}"]`);
+        if (latInp) latInp.value = lat;
+        if (lngInp) lngInp.value = lng;
+      }
+      // 数値ひとつだけの通常のペーストはブラウザの既定動作に任せる
+    }
+    waypointList.querySelectorAll(".wp-lat").forEach(inp => {
+      inp.addEventListener("input", () => {
+        const i = parseInt(inp.dataset.idx, 10);
+        waypoints[i].lat = inp.value;
+      });
+      inp.addEventListener("paste", (e) => handleCoordPaste(e, parseInt(inp.dataset.idx, 10)));
+    });
+    waypointList.querySelectorAll(".wp-lng").forEach(inp => {
+      inp.addEventListener("input", () => {
+        const i = parseInt(inp.dataset.idx, 10);
+        waypoints[i].lng = inp.value;
+      });
+      inp.addEventListener("paste", (e) => handleCoordPaste(e, parseInt(inp.dataset.idx, 10)));
+    });
+    renderItinerarySummary();
+  }
+  renderWaypoints();
+
+  let sampleAPI = null;
+  let mcpAPI = null;
+  let lastKusoHours = null;
+  let lastJisshaHours = null;
+  (async () => {
+    try { sampleAPI = await claude.use("sample"); } catch(e) { sampleAPI = null; }
+    try { mcpAPI = await claude.use("mcp"); } catch(e) { mcpAPI = null; }
+    const btn = document.getElementById("geocodeBtn");
+    if (!sampleAPI && !mcpAPI) {
+      btn.style.display = "none";
+      const statusEl = document.getElementById("geocodeStatus");
+      if (statusEl) statusEl.textContent = "この環境では座標の自動検索が利用できないため、緯度・経度を直接入力してください(Googleマップで地点を長押しすると表示される数値をコピーできます)。";
+    } else if (mcpAPI) {
+      btn.textContent = "📍 TomTomで座標を検索";
+    } else {
+      btn.textContent = "🤖 AIで座標を仮入力(概算・要確認)";
+    }
+  })();
+
+  async function geocodeWithTomTom(name) {
+    const result = await mcpAPI.callTool("TomTom Maps", "tomtom-geocode", {
+      query: name,
+      limit: 1,
+      countries: ["JP"],
+      language: "ja-JP"
+    });
+    const payload = result && result.payload;
+    const feature = payload && payload.features && payload.features[0];
+    if (feature && feature.geometry && Array.isArray(feature.geometry.coordinates)) {
+      const [lng, lat] = feature.geometry.coordinates;
+      return { lat, lng };
+    }
+    return null;
+  }
+
+  async function geocodeWithAI(name) {
+    const single = await sampleAPI.json(
+      "あなたは地理の専門家です。次の地点名・住所の緯度経度を、可能な限り正確に推定してください(特に指定がなければ日本国内と仮定)。特定できない場合はlatとlngをnullにしてください。\n\n地点: " + JSON.stringify(name) + "\n\n出力は必ず次の形式のJSONオブジェクト一つのみとし、説明文・前置き・コードブロック記法は一切含めないでください。\n{\"lat\": 数値, \"lng\": 数値}",
+      { modelTier: "complex" }
+    );
+    if (single && typeof single.lat === "number" && typeof single.lng === "number" && !isNaN(single.lat) && !isNaN(single.lng)) {
+      return { lat: single.lat, lng: single.lng };
+    }
+    return null;
+  }
+
+  document.getElementById("geocodeBtn").addEventListener("click", async () => {
+    if (!sampleAPI && !mcpAPI) return;
+    const statusEl = document.getElementById("geocodeStatus");
+    const btn = document.getElementById("geocodeBtn");
+    const names = waypoints.map(w => (w.name || "").trim()).filter(n => n.length > 0);
+    if (names.length < waypoints.length) {
+      statusEl.textContent = "すべての地点に名称・住所を入力してから検索してください。";
+      return;
+    }
+    btn.disabled = true;
+    statusEl.textContent = "座標を検索しています...";
+
+    let filled = 0, tomtomCount = 0, aiCount = 0, skipped = 0;
+    for (let i = 0; i < waypoints.length; i++) {
+      const existingLat = parseFloat(waypoints[i].lat);
+      const existingLng = parseFloat(waypoints[i].lng);
+      if (!isNaN(existingLat) && !isNaN(existingLng)) {
+        skipped++;
+        continue; // 既に座標が入っている地点は検索しない
+      }
+      const name = waypoints[i].name.trim();
+      let geo = null;
+      let usedTomTom = false;
+      if (mcpAPI) {
+        try {
+          geo = await geocodeWithTomTom(name);
+          if (geo) usedTomTom = true;
+        } catch (e) {
+          geo = null; // TomTom未接続・エラー時はAIにフォールバック
+        }
+      }
+      if (!geo && sampleAPI) {
+        try { geo = await geocodeWithAI(name); } catch (e) { geo = null; }
+      }
+      if (geo) {
+        waypoints[i].lat = geo.lat;
+        waypoints[i].lng = geo.lng;
+        filled++;
+        if (usedTomTom) tomtomCount++; else aiCount++;
+      }
+    }
+    renderWaypoints();
+
+    if (filled === 0 && skipped === waypoints.length) {
+      statusEl.textContent = "すべての地点に既に座標が入力されているため、検索は行いませんでした。";
+    } else if (filled === 0) {
+      statusEl.textContent = "座標を取得できませんでした。緯度・経度を直接入力してください。";
+    } else {
+      let msg = `${filled}/${waypoints.length - skipped}件の座標を取得しました`;
+      if (skipped) msg += `(${skipped}件は既に座標が入力済みのためスキップ)`;
+      if (tomtomCount && aiCount) msg += `(TomTom実データ ${tomtomCount}件・AI概算 ${aiCount}件)`;
+      else if (tomtomCount) msg += `(TomTomの実データを使用)`;
+      else if (aiCount) msg += `(AIによる概算のため、「地図で確認」で必ず場所を確認してください)`;
+      msg += "。";
+      if (filled < waypoints.length - skipped) msg += "取得できなかった地点は緯度・経度を直接入力してください。";
+      statusEl.textContent = msg;
+    }
+    btn.disabled = false;
+  });
+
+  function haversineKm(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const toRad = d => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLng = toRad(lng2 - lng1);
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+
+  let leafletMapInstance = null;
+  function ensureLeafletMap() {
+    if (!leafletMapInstance && window.L) {
+      leafletMapInstance = L.map("leafletMap");
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(leafletMapInstance);
+    }
+    return leafletMapInstance;
+  }
+
+  async function osrmRoute(pair) {
+    const coordStr = pair.map(p => p.lng + "," + p.lat).join(";");
+    const url = "https://router.project-osrm.org/route/v1/driving/" + coordStr + "?overview=full&geometries=geojson";
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("OSRM request failed");
+    const data = await res.json();
+    if (!data.routes || !data.routes.length) throw new Error("no route");
+    const route = data.routes[0];
+    return {
+      distanceKm: route.distance / 1000,
+      durationHours: route.duration / 3600,
+      geometry: route.geometry.coordinates.map(c => [c[1], c[0]])
+    };
+  }
+
+  function drawLeafletMap(points, legGeometries) {
+    const map = ensureLeafletMap();
+    if (!map) return;
+    map.eachLayer(layer => { if (!(layer instanceof L.TileLayer)) map.removeLayer(layer); });
+    const bounds = [];
+    points.forEach((p, i) => {
+      const isFirst = i === 0, isLast = i === points.length - 1;
+      const color = isFirst ? "#2FB380" : (isLast ? "#FF6B6B" : "#22314A");
+      const marker = L.circleMarker([p.lat, p.lng], { radius: 8, color: "#fff", weight: 2, fillColor: color, fillOpacity: 1 }).addTo(map);
+      marker.bindTooltip(escapeXml(p.name || ("地点" + (i + 1))));
+      bounds.push([p.lat, p.lng]);
+    });
+    legGeometries.forEach(geom => {
+      if (geom && geom.length) {
+        L.polyline(geom, { color: "#2E86DE", weight: 4, opacity: 0.85 }).addTo(map);
+        geom.forEach(pt => bounds.push(pt));
+      }
+    });
+    if (bounds.length) map.fitBounds(bounds, { padding: [24, 24] });
+  }
+
+  function escapeXml(s) {
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  document.getElementById("routeCalcBtn").addEventListener("click", async () => {
+    const pts = waypoints.map(wp => ({
+      name: wp.name,
+      lat: parseFloat(wp.lat),
+      lng: parseFloat(wp.lng)
+    }));
+    const invalid = pts.some(p => isNaN(p.lat) || isNaN(p.lng));
+    if (invalid) {
+      alert("すべての地点の緯度・経度を入力してください。");
+      return;
+    }
+
+    const btn = document.getElementById("routeCalcBtn");
+    const originalHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = "ルートを計算しています...";
+
+    const roadFactor = parseFloat(document.getElementById("roadFactor").value) || 1.2;
+    const avgSpeed = parseFloat(document.getElementById("avgSpeed").value) || 35;
+
+    const legGeometries = [];
+    let kusoDist = 0, jisshaDist = 0, kusoDur = 0, jisshaDur = 0;
+    let osrmCount = 0, fallbackCount = 0;
+
+    for (let i = 0; i < pts.length - 1; i++) {
+      let legKm, legHours, geom;
+      try {
+        const r = await osrmRoute([pts[i], pts[i + 1]]);
+        legKm = r.distanceKm;
+        legHours = r.durationHours;
+        geom = r.geometry;
+        osrmCount++;
+      } catch (e) {
+        const straight = haversineKm(pts[i].lat, pts[i].lng, pts[i + 1].lat, pts[i + 1].lng);
+        legKm = straight * roadFactor;
+        legHours = legKm / avgSpeed;
+        geom = [[pts[i].lat, pts[i].lng], [pts[i + 1].lat, pts[i + 1].lng]];
+        fallbackCount++;
+      }
+      legGeometries.push(geom);
+      if (legTypes[i] === "k") { kusoDist += legKm; kusoDur += legHours; }
+      else { jisshaDist += legKm; jisshaDur += legHours; }
+      const distEl = document.getElementById("legDist" + i);
+      if (distEl) distEl.textContent = "↓ " + legKm.toFixed(1) + " km";
+    }
+
+    const totalDist = kusoDist + jisshaDist;
+    const totalHours = kusoDur + jisshaDur;
+    lastKusoHours = kusoDur;
+    lastJisshaHours = jisshaDur;
+
+    function hmText(hrs) {
+      const hh = Math.floor(hrs);
+      const mm = Math.round((hrs - hh) * 60);
+      return hh + "時間" + (mm > 0 ? mm + "分" : "");
+    }
+
+    document.getElementById("splitKuso").textContent = kusoDist.toFixed(1) + " km ・ " + hmText(kusoDur);
+    document.getElementById("splitJissha").textContent = jisshaDist.toFixed(1) + " km ・ " + hmText(jisshaDur);
+    document.getElementById("legSplitSummary").style.display = "flex";
+    document.getElementById("splitNote").style.display = "block";
+
+    document.getElementById("routeRoadOut").textContent = totalDist.toFixed(1) + " km";
+    const h = Math.floor(totalHours);
+    const m = Math.round((totalHours - h) * 60);
+    document.getElementById("routeTimeOut").textContent = h + "時間" + (m > 0 ? m + "分" : "");
+    document.getElementById("routeSummary").style.display = "flex";
+
+    document.getElementById("mapWrap").classList.add("open");
+    setTimeout(() => {
+      const map = ensureLeafletMap();
+      if (map) { map.invalidateSize(); drawLeafletMap(pts, legGeometries); }
+    }, 50);
+
+    // 運賃計算欄へ自動反映(合計は九州運輸局方式の出庫〜帰庫の全時間・距離)
+    document.getElementById("distance").value = totalDist.toFixed(1);
+    document.getElementById("hours").value = h;
+    document.getElementById("minutes").value = m;
+
+    btn.disabled = false;
+    btn.innerHTML = originalHtml;
+
+    if (fallbackCount > 0) {
+      alert(osrmCount > 0
+        ? `一部の区間(${fallbackCount}件)で道路ルート計算(OSRM)に失敗したため、直線距離からの概算を使用しました。`
+        : "道路ルート計算(OSRM)に接続できなかったため、直線距離からの概算を使用しました。しばらくしてから再度お試しください。");
+    }
+  });
+
+  document.getElementById("applyUsageBtn").addEventListener("click", () => {
+    const usageH = parseFloat(document.getElementById("usageHours").value) || 0;
+    const usageM = parseFloat(document.getElementById("usageMinutes").value) || 0;
+    const usageTotal = usageH + usageM / 60;
+
+    const kuso = lastKusoHours || 0;
+    const jissha = lastJisshaHours !== null ? lastJisshaHours : 0;
+    const noteEl = document.getElementById("usageNote");
+
+    let idle = usageTotal - jissha;
+    let warn = "";
+    if (lastJisshaHours === null) {
+      warn = "②で経路を自動計算していないため、実車走行時間を0として計算しています。";
+    }
+    if (idle < 0) {
+      warn += (warn ? " " : "") + "ご利用時間が実車走行時間より短いため、待機時間は0として計算しました。";
+      idle = 0;
+    }
+
+    const totalHours = kuso + usageTotal; // = 回送 + 実車 + 待機
+    const hh = Math.floor(totalHours);
+    const mm = Math.round((totalHours - hh) * 60);
+    document.getElementById("hours").value = hh;
+    document.getElementById("minutes").value = mm;
+
+    function hmText(hrs) {
+      const h2 = Math.floor(hrs);
+      const m2 = Math.round((hrs - h2) * 60);
+      return h2 + "時間" + (m2 > 0 ? m2 + "分" : "");
+    }
+    noteEl.style.display = "block";
+    noteEl.textContent = `回送 ${hmText(kuso)} ＋ ご利用時間 ${hmText(usageTotal)}(うち実車 ${hmText(jissha)}・待機 ${hmText(idle)}) → 走行時間 ${hmText(totalHours)} を反映しました。` + (warn ? " " + warn : "");
+  });
+
+  /* ---------------- 運賃計算 ---------------- */
+  function roundDrivingHours(totalHours) {
+    const whole = Math.floor(totalHours);
+    const frac = totalHours - whole;
+    return frac < 0.5 ? whole : whole + 1;
+  }
+
+  function loadHistory() {
+    try { const raw = localStorage.getItem("kyushuBusFareHistory"); return raw ? JSON.parse(raw) : []; }
+    catch(e) { return []; }
+  }
+  function saveHistory(list) {
+    try { localStorage.setItem("kyushuBusFareHistory", JSON.stringify(list.slice(0,10))); }
+    catch(e) { /* ignore */ }
+  }
+  function renderHistory() {
+    const list = loadHistory();
+    const el = document.getElementById("historyList");
+    if (!list.length) { el.innerHTML = '<div class="history-empty">まだ計算履歴はありません</div>'; return; }
+    el.innerHTML = "";
+    list.forEach(item => {
+      const row = document.createElement("div");
+      row.className = "history-item";
+      row.innerHTML = `<span>${item.vehicleLabel} / ${item.distance}km・${item.hoursLabel}</span><span><strong>${item.total}</strong><div class="meta">${item.date}</div></span>`;
+      el.appendChild(row);
+    });
+  }
+  document.getElementById("clearHistory").addEventListener("click", () => { saveHistory([]); renderHistory(); });
+  renderHistory();
+
+  document.getElementById("calcBtn").addEventListener("click", () => {
+    const kmRate = parseFloat(kmRateEl.value) || 0;
+    const hourRate = parseFloat(hourRateEl.value) || 0;
+    const distanceInput = parseFloat(document.getElementById("distance").value) || 0;
+    const hoursInput = parseFloat(document.getElementById("hours").value) || 0;
+    const minutesInput = parseFloat(document.getElementById("minutes").value) || 0;
+
+    const rawDrivingHours = hoursInput + (minutesInput / 60);
+    let drivingHoursRounded = roundDrivingHours(rawDrivingHours);
+    const minGuaranteed = drivingHoursRounded < 3;
+    const drivingHoursFinal = Math.max(drivingHoursRounded, 3);
+    const fareCalcHours = drivingHoursFinal + 2;
+
+    const distanceRounded = distanceInput > 0 ? Math.ceil(distanceInput / 10) * 10 : 0;
+
+    const kmFare = distanceRounded * kmRate;
+    const timeFare = fareCalcHours * hourRate;
+
+    const nightEnabled = document.getElementById("nightToggle").checked;
+    const nightHours = nightEnabled ? (parseFloat(document.getElementById("nightHours").value) || 0) : 0;
+    const nightFare = nightHours * hourRate * 0.2;
+
+    const reliefEnabled = document.getElementById("reliefToggle").checked;
+    const reliefKmRate = reliefEnabled ? (parseFloat(document.getElementById("reliefKmRate").value) || 0) : 0;
+    const reliefHourRate = reliefEnabled ? (parseFloat(document.getElementById("reliefHourRate").value) || 0) : 0;
+    const reliefFare = reliefEnabled ? (distanceRounded * reliefKmRate + fareCalcHours * reliefHourRate) : 0;
+
+    const subtotal = kmFare + timeFare + nightFare + reliefFare;
+    const tax = subtotal * 0.10;
+    const total = subtotal * 1.10;
+
+    document.getElementById("distDetail").textContent = distanceInput > 0 ? `(入力 ${distanceInput}km → 10km未満切り上げ)` : "";
+    document.getElementById("distOut").textContent = distanceRounded + " km";
+
+    let timeDetailText = `(走行 ${hoursInput}時間${minutesInput}分 → ${drivingHoursFinal}時間`;
+    if (minGuaranteed) timeDetailText += "・3時間保障適用";
+    timeDetailText += " ＋ 点検2時間)";
+    document.getElementById("timeDetail").textContent = timeDetailText;
+    document.getElementById("timeOut").textContent = fareCalcHours + " 時間";
+
+    document.getElementById("kmFareOut").textContent = yen(kmFare);
+    document.getElementById("timeFareOut").textContent = yen(timeFare);
+
+    const nightRow = document.getElementById("nightRow");
+    if (nightEnabled && nightHours > 0) { nightRow.style.display = "flex"; document.getElementById("nightOut").textContent = yen(nightFare); }
+    else nightRow.style.display = "none";
+
+    const reliefRow = document.getElementById("reliefRow");
+    if (reliefEnabled) { reliefRow.style.display = "flex"; document.getElementById("reliefOut").textContent = yen(reliefFare); }
+    else reliefRow.style.display = "none";
+
+    document.getElementById("subtotalOut").textContent = yen(subtotal);
+    document.getElementById("totalOut").textContent = yen(total);
+    document.getElementById("taxNote").textContent = `税抜 ${yen(subtotal)} + 消費税等 ${yen(tax)}`;
+
+    document.getElementById("resultBody").classList.add("open");
+    document.getElementById("resultEmpty").classList.add("hidden");
+    switchTab(4);
+
+    const vLabel = VEHICLES.find(v => v.id === currentVehicle).label;
+    const history = loadHistory();
+    history.unshift({
+      vehicleLabel: vLabel, distance: distanceRounded, hoursLabel: fareCalcHours + "時間",
+      total: yen(total),
+      date: new Date().toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })
+    });
+    saveHistory(history);
+    renderHistory();
+  });
+})();
+</script>
+</body>
+</html>
