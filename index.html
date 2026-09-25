@@ -261,9 +261,14 @@
   .waypoint-coords label { font-size: 0.82rem; min-height: 2.5em; }
   .coord-hint { font-size: 0.68rem; color: var(--text-muted); font-weight: 400; }
   .wp-coord-actions {
-    display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
     margin-top: 8px; gap: 6px 14px;
   }
+  .map-check-link {
+    display: inline-block; font-size: 0.8rem; font-weight: 600;
+    color: var(--accent-text); text-decoration: none;
+  }
+  .map-check-link:active { opacity: 0.7; }
   .wp-clear-coords-btn {
     background: none; border: none; color: var(--danger); font-size: 0.78rem;
     font-weight: 600; cursor: pointer; padding: 2px 4px; white-space: nowrap;
@@ -668,6 +673,13 @@
     el.innerHTML = html;
   }
 
+  function coordCheckHref(wp) {
+    const lat = parseFloat(wp.lat);
+    const lng = parseFloat(wp.lng);
+    if (isNaN(lat) || isNaN(lng)) return "#";
+    return "https://www.google.com/maps?q=" + lat + "," + lng;
+  }
+
   function renderWaypoints() {
     legTypes = defaultLegTypes(waypoints.length - 1);
     waypointList.innerHTML = "";
@@ -705,6 +717,7 @@
           </div>
         </div>
         <div class="wp-coord-actions">
+          <a href="${coordCheckHref(wp)}" class="map-check-link" id="mapCheckLink${idx}" data-idx="${idx}">🗺️ 座標確認</a>
           <button type="button" class="wp-clear-coords-btn" data-idx="${idx}">✕ 座標を消す</button>
         </div>
       `;
@@ -784,6 +797,18 @@
         renderWaypoints();
       });
     });
+    waypointList.querySelectorAll(".map-check-link").forEach(a => {
+      a.addEventListener("click", (e) => {
+        const i = parseInt(a.dataset.idx, 10);
+        const lat = parseFloat(waypoints[i].lat);
+        const lng = parseFloat(waypoints[i].lng);
+        if (isNaN(lat) || isNaN(lng)) {
+          e.preventDefault();
+          alert("この地点の緯度・経度がまだ入力されていません。");
+        }
+        // 緯度経度があれば href は最新の値に更新済みなので、既定の遷移に任せる
+      });
+    });
     waypointList.querySelectorAll(".wp-clear-coords-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const i = parseInt(btn.dataset.idx, 10);
@@ -846,6 +871,8 @@
         const lngInp = waypointList.querySelector(`.wp-lng[data-idx="${i}"]`);
         if (latInp) latInp.value = lat;
         if (lngInp) lngInp.value = lng;
+        const link = document.getElementById("mapCheckLink" + i);
+        if (link) link.href = coordCheckHref(waypoints[i]);
       }
       // 数値ひとつだけの通常のペーストはブラウザの既定動作に任せる
     }
@@ -853,6 +880,8 @@
       inp.addEventListener("input", () => {
         const i = parseInt(inp.dataset.idx, 10);
         waypoints[i].lat = inp.value;
+        const link = document.getElementById("mapCheckLink" + i);
+        if (link) link.href = coordCheckHref(waypoints[i]);
       });
       inp.addEventListener("paste", (e) => handleCoordPaste(e, parseInt(inp.dataset.idx, 10)));
     });
@@ -860,6 +889,8 @@
       inp.addEventListener("input", () => {
         const i = parseInt(inp.dataset.idx, 10);
         waypoints[i].lng = inp.value;
+        const link = document.getElementById("mapCheckLink" + i);
+        if (link) link.href = coordCheckHref(waypoints[i]);
       });
       inp.addEventListener("paste", (e) => handleCoordPaste(e, parseInt(inp.dataset.idx, 10)));
     });
@@ -875,14 +906,12 @@
     try { sampleAPI = await claude.use("sample"); } catch(e) { sampleAPI = null; }
     try { mcpAPI = await claude.use("mcp"); } catch(e) { mcpAPI = null; }
     const btn = document.getElementById("geocodeBtn");
-    if (!sampleAPI && !mcpAPI) {
-      btn.style.display = "none";
-      const statusEl = document.getElementById("geocodeStatus");
-      if (statusEl) statusEl.textContent = "この環境では座標の自動検索が利用できないため、緯度・経度を直接入力してください(Googleマップで地点を長押しすると表示される数値をコピーできます)。";
-    } else if (mcpAPI) {
+    if (mcpAPI) {
       btn.textContent = "📍 TomTomで座標を検索";
-    } else {
+    } else if (sampleAPI) {
       btn.textContent = "🤖 AIで座標を仮入力(概算・要確認)";
+    } else {
+      btn.textContent = "📍 座標を検索(OpenStreetMap)";
     }
   })();
 
@@ -913,8 +942,18 @@
     return null;
   }
 
+  async function geocodeWithNominatim(name) {
+    const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=ja&q=" + encodeURIComponent(name);
+    const res = await fetch(url, { headers: { "Accept": "application/json" } });
+    if (!res.ok) throw new Error("Nominatim request failed");
+    const data = await res.json();
+    if (Array.isArray(data) && data.length && data[0].lat && data[0].lon) {
+      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+    }
+    return null;
+  }
+
   document.getElementById("geocodeBtn").addEventListener("click", async () => {
-    if (!sampleAPI && !mcpAPI) return;
     const statusEl = document.getElementById("geocodeStatus");
     const btn = document.getElementById("geocodeBtn");
     const names = waypoints.map(w => (w.name || "").trim()).filter(n => n.length > 0);
@@ -925,7 +964,7 @@
     btn.disabled = true;
     statusEl.textContent = "座標を検索しています...";
 
-    let filled = 0, tomtomCount = 0, aiCount = 0, skipped = 0;
+    let filled = 0, tomtomCount = 0, aiCount = 0, osmCount = 0, skipped = 0;
     for (let i = 0; i < waypoints.length; i++) {
       const existingLat = parseFloat(waypoints[i].lat);
       const existingLng = parseFloat(waypoints[i].lng);
@@ -935,23 +974,33 @@
       }
       const name = waypoints[i].name.trim();
       let geo = null;
-      let usedTomTom = false;
+      let source = null;
       if (mcpAPI) {
         try {
           geo = await geocodeWithTomTom(name);
-          if (geo) usedTomTom = true;
-        } catch (e) {
-          geo = null; // TomTom未接続・エラー時はAIにフォールバック
-        }
+          if (geo) source = "tomtom";
+        } catch (e) { geo = null; }
       }
       if (!geo && sampleAPI) {
-        try { geo = await geocodeWithAI(name); } catch (e) { geo = null; }
+        try {
+          geo = await geocodeWithAI(name);
+          if (geo) source = "ai";
+        } catch (e) { geo = null; }
+      }
+      if (!geo && !mcpAPI && !sampleAPI) {
+        try {
+          geo = await geocodeWithNominatim(name);
+          if (geo) source = "osm";
+        } catch (e) { geo = null; }
+        await new Promise(r => setTimeout(r, 1100)); // Nominatimの利用ポリシー(1リクエスト/秒)に配慮
       }
       if (geo) {
         waypoints[i].lat = geo.lat;
         waypoints[i].lng = geo.lng;
         filled++;
-        if (usedTomTom) tomtomCount++; else aiCount++;
+        if (source === "tomtom") tomtomCount++;
+        else if (source === "ai") aiCount++;
+        else if (source === "osm") osmCount++;
       }
     }
     renderWaypoints();
@@ -963,9 +1012,9 @@
     } else {
       let msg = `${filled}/${waypoints.length - skipped}件の座標を取得しました`;
       if (skipped) msg += `(${skipped}件は既に座標が入力済みのためスキップ)`;
-      if (tomtomCount && aiCount) msg += `(TomTom実データ ${tomtomCount}件・AI概算 ${aiCount}件)`;
-      else if (tomtomCount) msg += `(TomTomの実データを使用)`;
-      else if (aiCount) msg += `(AIによる概算のため、「地図で確認」で必ず場所を確認してください)`;
+      if (tomtomCount) msg += `(TomTom実データ ${tomtomCount}件)`;
+      else if (aiCount) msg += `(AIによる概算 ${aiCount}件のため、正しい場所か「🔍 マップ検索」で確認してください)`;
+      else if (osmCount) msg += `(OpenStreetMapのデータ ${osmCount}件。念のため「🔍 マップ検索」で確認してください)`;
       msg += "。";
       if (filled < waypoints.length - skipped) msg += "取得できなかった地点は緯度・経度を直接入力してください。";
       statusEl.textContent = msg;
